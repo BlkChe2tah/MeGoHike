@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">MeGoHike</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="fragment_hiking_list">MeGoHike</string>
+    <string name="fragment_new_hiking">New hiking activity</string>
+    <string name="fragment_new_observation">New Observation</string>
+    <string name="add_new">Add New</string>
+    <!-- message -->
+    <string name="no_hiking_data">Unfortunately, there is no available data on hiking activities at this time.</string>
+    <string name="hiking_data_empty_icon">Hiking data empty icon</string>
+    <string name="name_of_hike">Name of Hike</string>
+    <string name="length_of_hike">Length of Hike</string>
+    <string name="level_of_difficulty">Level of Difficulty</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="start_date">Start Date (DD\/MM\/YYYY)</string>
+    <string name="date">Date (DD\/MM\/YYYY)</string>
+    <string name="time">Time (HH:MM)</string>
+    <string name="period">AM/PM</string>
+    <string name="comment">Comment</string>
+    <string name="expected_date">Expected Date (DD\/MM\/YYYY)</string>
+    <string name="parking_available">Parking Available</string>
+    <string name="save">Save</string>
+    <string name="provide_name_of_hike">Please provide a name of Hike</string>
+    <string name="provide_length_of_hike">Please provide a length of Hike</string>
+    <string name="enter_valid_date_format">Please enter a valid date format (DD/MM/YYYY)</string>
+    <string name="information_detail">Information Detail</string>
+    <string name="start_date_detail">Start date</string>
+    <string name="expected_end_date_detail">Expected end date</string>
+    <string name="observations">Observations</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="observation">Observation</string>
+</resources>

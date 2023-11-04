@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/HikingListFragment">
+
+    <fragment
+        android:id="@+id/HikingListFragment"
+        android:name="com.example.megohike.presentation.hiking_list.HikingListFragment"
+        android:label="@string/fragment_hiking_list"
+        tools:layout="@layout/fragment_hiking_list">
+
+        <action
+            android:id="@+id/action_HikingListFragment_to_NewHikingFragment"
+            app:destination="@id/NewHikingFragment" />
+        <action
+            android:id="@+id/action_HikingListFragment_to_hikingDetailFragment"
+            app:destination="@id/hikingDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/NewHikingFragment"
+        android:name="com.example.megohike.presentation.new_hiking.NewHikingFragment"
+        android:label="@string/fragment_new_hiking"
+        tools:layout="@layout/fragment_new_hiking">
+    </fragment>
+    <fragment
+        android:id="@+id/hikingDetailFragment"
+        tools:layout="@layout/fragment_hiking_detail"
+        android:name="com.example.megohike.presentation.hiking_detail.HikingDetailFragment" >
+        <argument
+            android:name="hikeInfo"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_hikingDetailFragment_to_newObservationFragment"
+            app:destination="@id/newObservationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newObservationFragment"
+        tools:layout="@layout/fragment_new_observation"
+        android:name="com.example.megohike.presentation.new_observation.NewObservationFragment"
+        android:label="@string/fragment_new_observation" />
+</navigation>

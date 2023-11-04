@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="@dimen/edge_inset_large"
+    app:cardBackgroundColor="?attr/colorPrimaryContainer"
+    app:cardElevation="0dp"
+    app:strokeWidth="0dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:alpha="0.3"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:layout_gravity="end"
+            android:src="@drawable/mountains"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+<LinearLayout
+    android:padding="@dimen/edge_inset_large"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/hikingInfoItemLevel"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textAppearance="?attr/textAppearanceLabelMedium"
+        android:layout_width="match_parent"
+        tools:text="Level of Difficulty - Easy"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/hikingInfoItemText"
+        android:layout_marginTop="@dimen/edge_inset_small"
+        android:textAppearance="?attr/textAppearanceHeadlineMedium"
+        android:layout_width="match_parent"
+        tools:text="Yangon"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textColor="?attr/colorOnPrimaryContainer"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/edge_inset_medium"
+        android:orientation="horizontal"
+        android:layout_gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@drawable/outline_date_range_24"
+            app:tint="?attr/colorOnSurfaceVariant"
+            android:layout_width="20dp"
+            android:layout_height="20dp"/>
+
+        <TextView
+            android:id="@+id/hikingInfoItemDate"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:layout_marginStart="@dimen/edge_inset_medium"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:layout_width="match_parent"
+            tools:text="Yangon"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</LinearLayout>
+    </FrameLayout>
+</com.google.android.material.card.MaterialCardView>

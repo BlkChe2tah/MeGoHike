@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <layer-list>
+            <item>
+                <shape>
+                    <stroke android:color="?attr/colorOutline" android:width="1dp"/>
+                    <corners android:radius="4dp"/>
+                </shape>
+            </item>
+            <item android:end="@dimen/edge_inset_large" android:gravity="center_vertical|end" android:drawable="@drawable/sharp_arrow_drop_down_24" />
+        </layer-list>
+    </item>
+</selector>

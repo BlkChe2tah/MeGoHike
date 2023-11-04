@@ -1,0 +1,6 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="edge_inset_small">4dp</dimen>
+    <dimen name="edge_inset_medium">8dp</dimen>
+    <dimen name="edge_inset_large">16dp</dimen>
+</resources>

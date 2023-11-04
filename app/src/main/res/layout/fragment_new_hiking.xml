@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/edge_inset_large"
+    tools:context=".presentation.new_hiking.NewHikingFragment">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/nameTextLayout"
+                android:hint="@string/name_of_hike"
+                app:hintEnabled="true"
+                app:errorEnabled="true"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nameEditText"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/edge_inset_small"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:hint="@string/latitude"
+                    app:hintEnabled="true"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_weight="1"
+                    app:errorEnabled="true"
+                    android:layout_marginEnd="@dimen/edge_inset_large"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/latitudeEditText"
+                        android:maxLines="1"
+                        android:inputType="text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:hint="@string/longitude"
+                    app:hintEnabled="true"
+                    app:errorEnabled="true"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/longitudeEditText"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/lengthTextLayout"
+                android:hint="@string/length_of_hike"
+                app:hintEnabled="true"
+                android:layout_marginTop="@dimen/edge_inset_small"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+                app:suffixText="km"
+                app:errorEnabled="true"
+                app:suffixTextColor="?attr/colorOnSurface"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/lengthEditText"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/startDateTextLayout"
+                android:hint="@string/start_date"
+                app:hintEnabled="true"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+                app:endIconMode="custom"
+                app:errorEnabled="true"
+                android:layout_marginTop="@dimen/edge_inset_small"
+                app:endIconDrawable="@drawable/round_access_time_24"
+                app:endIconTint="?attr/colorOnSurfaceVariant"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/startDateEditText"
+                    android:inputType="date"
+                    android:maxLines="1"
+                    android:maxLength="10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/expectedDateTextLayout"
+                android:hint="@string/expected_date"
+                app:hintEnabled="true"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+                app:endIconMode="custom"
+                android:layout_marginTop="@dimen/edge_inset_small"
+                app:errorEnabled="true"
+                app:endIconDrawable="@drawable/round_access_time_24"
+                app:endIconTint="?attr/colorOnSurfaceVariant"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/expectedDateEditText"
+                    android:inputType="date"
+                    android:maxLines="1"
+                    android:maxLength="10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:text="@string/level_of_difficulty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/levelDropDown"
+                android:layout_marginTop="@dimen/edge_inset_medium"
+                android:spinnerMode="dialog"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+                android:background="@drawable/drop_down_outline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/edge_inset_large"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="@string/parking_available"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/parkingAvailableSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/saveBtn"
+                android:layout_marginTop="@dimen/edge_inset_large"
+                android:text="@string/save"
+                app:cornerRadius="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
