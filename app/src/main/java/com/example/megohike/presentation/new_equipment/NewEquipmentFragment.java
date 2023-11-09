@@ -1,6 +1,11 @@
-package com.example.megohike.presentation.new_observation;
+package com.example.megohike.presentation.new_equipment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,37 +17,27 @@ import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.megohike.R;
 import com.example.megohike.common.AppDatePicker;
 import com.example.megohike.common.AppTimePicker;
 import com.example.megohike.common.InputTextWatcher;
 import com.example.megohike.common.InputTimeConverter;
 import com.example.megohike.data.data_source.database.HikeInformationDatabase;
-import com.example.megohike.data.use_case.AddNewHikeInfoUseCaseImpl;
+import com.example.megohike.data.use_case.AddNewEquipmentUseCaseImpl;
 import com.example.megohike.data.use_case.AddNewObservationUseCaseImpl;
+import com.example.megohike.databinding.FragmentNewEquipmentBinding;
 import com.example.megohike.databinding.FragmentNewObservationBinding;
-import com.example.megohike.presentation.hiking_detail.HikingDetailFragmentArgs;
-import com.example.megohike.presentation.new_hiking.view_model.NewHikingViewModel;
-import com.example.megohike.presentation.new_hiking.view_model.NewHikingViewModelFactory;
+import com.example.megohike.presentation.new_equipment.view_model.NewEquipmentViewModel;
+import com.example.megohike.presentation.new_equipment.view_model.NewEquipmentViewModelFactory;
+import com.example.megohike.presentation.new_observation.NewObservationFragmentArgs;
 import com.example.megohike.presentation.new_observation.view_model.NewObservationViewModel;
 import com.example.megohike.presentation.new_observation.view_model.NewObservationViewModelFactory;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class NewObservationFragment extends Fragment implements AppDatePicker.DateSetListener, AppTimePicker.TimeSetListener {
+public class NewEquipmentFragment extends Fragment {
 
-    private static final String DATE_PICKER_FRAGMENT = "DATE_PICKER";
-    private static final String TIME_PICKER_FRAGMENT = "TIME_PICKER";
-
-    private FragmentNewObservationBinding binding;
-    private NewObservationViewModel viewModel;
+    private FragmentNewEquipmentBinding binding;
+    private NewEquipmentViewModel viewModel;
     private String hikeInfoId = "0";
 
     @Override
@@ -50,28 +45,16 @@ public class NewObservationFragment extends Fragment implements AppDatePicker.Da
         super.onCreate(savedInstanceState);
         final HikeInformationDatabase database = HikeInformationDatabase.getDatabase(getContext());
         viewModel = new ViewModelProvider(
-                this, new NewObservationViewModelFactory(new AddNewObservationUseCaseImpl(database))
-        ).get(NewObservationViewModel.class);
-        hikeInfoId = NewObservationFragmentArgs.fromBundle(getArguments()).getInfoId();
+                this, new NewEquipmentViewModelFactory(new AddNewEquipmentUseCaseImpl(database))
+        ).get(NewEquipmentViewModel.class);
+        hikeInfoId = NewEquipmentFragmentArgs.fromBundle(getArguments()).getInfoId();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentNewObservationBinding.inflate(inflater, container, false);
+        binding = FragmentNewEquipmentBinding.inflate(inflater, container, false);
         setupTextListener();
-        binding.dateTextLayout.setEndIconOnClickListener(v -> {
-            if (getActivity() != null) {
-                final AppDatePicker.DatePickerFragment datePickerFragment = new AppDatePicker.DatePickerFragment(DATE_PICKER_FRAGMENT,this);
-                datePickerFragment.show(getActivity().getSupportFragmentManager(), DATE_PICKER_FRAGMENT);
-            }
-        });
-        binding.timeTextLayout.setEndIconOnClickListener(v -> {
-            if (getActivity() != null) {
-                final AppTimePicker.TimePickerFragment timePickerFragment = new AppTimePicker.TimePickerFragment(TIME_PICKER_FRAGMENT,this);
-                timePickerFragment.show(getActivity().getSupportFragmentManager(), TIME_PICKER_FRAGMENT);
-            }
-        });
         binding.saveBtn.setOnClickListener(v -> {
             final int id = Integer.parseInt(hikeInfoId);
             if (id != 0) {
@@ -86,9 +69,8 @@ public class NewObservationFragment extends Fragment implements AppDatePicker.Da
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        checkEditTextErrorState(this.getViewLifecycleOwner(), viewModel.isNameEmpty, binding.nameTextLayout, getResources().getString(R.string.provide_observation));
-        checkEditTextErrorState(this.getViewLifecycleOwner(), viewModel.isDateFormatCorrect, binding.dateTextLayout, getResources().getString(R.string.enter_valid_date_format));
-        checkEditTextErrorState(this.getViewLifecycleOwner(), viewModel.isTimeFormatCorrect, binding.timeTextLayout, getResources().getString(R.string.enter_valid_time_format));
+        checkEditTextErrorState(this.getViewLifecycleOwner(), viewModel.isNameEmpty, binding.nameTextLayout, getResources().getString(R.string.provide_equipment));
+        checkEditTextErrorState(this.getViewLifecycleOwner(), viewModel.isCountCorrect, binding.countTextLayout, getResources().getString(R.string.provide_count));
         viewModel.getBtnEnableState.observe(this.getViewLifecycleOwner(), isEnable -> {
             binding.saveBtn.setEnabled(isEnable);
         });
@@ -98,7 +80,7 @@ public class NewObservationFragment extends Fragment implements AppDatePicker.Da
                     final NavController navController = Navigation.findNavController(view);
                     final NavBackStackEntry backStack = navController.getPreviousBackStackEntry();
                     if (backStack != null) {
-                        backStack.getSavedStateHandle().set("back_result", true);
+                        backStack.getSavedStateHandle().set("back_result_equipment", true);
                     }
                     navController.popBackStack();
                     Toast.makeText(getContext(), "Data was successfully saved", Toast.LENGTH_SHORT).show();
@@ -121,22 +103,7 @@ public class NewObservationFragment extends Fragment implements AppDatePicker.Da
 
     private void setupTextListener() {
         binding.nameEditText.addTextChangedListener(new InputTextWatcher(s -> viewModel.setName(s)));
-        binding.dateEditText.addTextChangedListener(new InputTextWatcher(s -> viewModel.setDate(s)));
-        binding.timeEditText.addTextChangedListener(new InputTextWatcher(s -> viewModel.setTime(s)));
-        binding.commentEditText.addTextChangedListener(new InputTextWatcher(s -> viewModel.setComment(s)));
-    }
-
-    @Override
-    public void onDateSet(String date, String tag) {
-        binding.dateEditText.setText(date, TextView.BufferType.EDITABLE);
-        binding.dateEditText.setSelection(date.length());
-    }
-
-    @Override
-    public void onTimeSet(String time, String tag) {
-        final String result = InputTimeConverter.convert24to12(time);
-        binding.timeEditText.setText(result, TextView.BufferType.EDITABLE);
-        binding.timeEditText.setSelection(result.length());
+        binding.countEditText.addTextChangedListener(new InputTextWatcher(s -> viewModel.setCount(s)));
     }
 
 }

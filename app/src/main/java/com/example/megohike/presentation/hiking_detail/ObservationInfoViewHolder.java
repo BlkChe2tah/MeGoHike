@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.megohike.R;
+import com.example.megohike.common.InputDateConverter;
 import com.example.megohike.data.data_source.database.entities.Observation;
 
 class ObservationInfoViewHolder extends RecyclerView.ViewHolder {
@@ -39,17 +40,15 @@ class ObservationInfoViewHolder extends RecyclerView.ViewHolder {
         addNewContainer.setVisibility(data == null ? View.VISIBLE : View.GONE);
         observationContainer.setVisibility(data != null ? View.VISIBLE : View.GONE);
         if (data != null) {
+            time.setText(InputDateConverter.convertTimeToDateTimeString(data.getTime()));
             name.setText(data.getObservation());
             comment.setText(data.getComment());
         }
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (data == null) {
-                    listener.onAddNewItemClick(v);
-                } else {
-                    listener.onClick(v, data);
-                }
+        itemView.setOnClickListener(v -> {
+            if (data == null) {
+                listener.onAddNewItemClick(v);
+            } else {
+                listener.onClick(v, data);
             }
         });
     }

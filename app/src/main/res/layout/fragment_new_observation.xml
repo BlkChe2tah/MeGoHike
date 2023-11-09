@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/edge_inset_large"
-    tools:context=".presentation.new_hiking.NewHikingFragment">
+    android:padding="@dimen/edge_inset_large">
 
     <LinearLayout
         android:orientation="vertical"
@@ -53,57 +52,28 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/timeTextLayout"
+            android:hint="@string/time"
+            app:hintEnabled="true"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+            app:endIconMode="custom"
+            android:layout_marginTop="@dimen/edge_inset_small"
+            app:errorEnabled="true"
+            app:endIconDrawable="@drawable/round_access_time_24"
+            app:endIconTint="?attr/colorOnSurfaceVariant"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/timeTextLayout"
-                android:hint="@string/time"
-                app:hintEnabled="true"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
-                app:endIconMode="custom"
-                android:layout_marginTop="@dimen/edge_inset_small"
-                app:errorEnabled="true"
-                android:layout_weight="1"
-                app:endIconDrawable="@drawable/round_access_time_24"
-                app:endIconTint="?attr/colorOnSurfaceVariant"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/timeEditText"
+                android:inputType="text"
+                android:maxLines="1"
+                android:maxLength="8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/timeEditText"
-                    android:inputType="time"
-                    android:maxLines="1"
-                    android:maxLength="5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/periodTextLayout"
-                android:hint="@string/period"
-                app:hintEnabled="true"
-                android:layout_marginStart="@dimen/edge_inset_large"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
-                android:layout_marginTop="@dimen/edge_inset_small"
-                app:errorEnabled="true"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/periodEditText"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:maxLength="5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/commentTextLayout"

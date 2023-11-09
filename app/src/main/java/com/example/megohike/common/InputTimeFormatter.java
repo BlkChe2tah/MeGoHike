@@ -7,12 +7,11 @@ import java.text.SimpleDateFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class InputDateFormatter {
+public class InputTimeFormatter {
 
-    private static final Pattern pattern = Pattern.compile("\\b\\d{1,2}/\\d{1,2}/\\d{4}\\b");
-
+    private static final Pattern pattern = Pattern.compile("^\\d{1,2}:\\d{1,2} (?:\\w{2})$");
     @SuppressLint("SimpleDateFormat")
-    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("hh:mm aaa");
 
     public static Boolean isFormatCorrect(String inputDate) {
         if (inputDate != null) {

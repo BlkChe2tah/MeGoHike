@@ -10,26 +10,36 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MediatorLiveData;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.megohike.R;
+import com.example.megohike.common.AppDatePicker;
+import com.example.megohike.common.InputTextWatcher;
 import com.example.megohike.data.data_source.database.HikeInformationDatabase;
 import com.example.megohike.data.use_case.AddNewHikeInfoUseCaseImpl;
 import com.example.megohike.databinding.FragmentNewHikingBinding;
 import com.example.megohike.domain.HikingLevel;
 import com.example.megohike.presentation.new_hiking.view_model.NewHikingViewModel;
 import com.example.megohike.presentation.new_hiking.view_model.NewHikingViewModelFactory;
+import com.google.android.material.textfield.TextInputLayout;
 
-public class NewHikingFragment extends Fragment {
+public class NewHikingFragment extends Fragment implements AppDatePicker.DateSetListener {
+
+    private static final String START_DATE_PICKER_FRAGMENT = "START_DATE_PICKER";
+    private static final String EXPECTED_DATE_PICKER_FRAGMENT = "EXPECTED_DATE_PICKER";
 
     private FragmentNewHikingBinding binding;
 
@@ -50,58 +60,36 @@ public class NewHikingFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         binding = FragmentNewHikingBinding.inflate(inflater, container, false);
+        setupTextListener();
         setupLevelDropDown(getContext());
-        setupNameOfHikeTextListener();
-        setupLengthOfHikeTextListener();
-        setupStartDateTextListener();
-        setupExpectedDateTextListener();
-        setupLatitudeTextListener();
-        setupLongitudeTextListener();
         setupParkingAvailableListener();
-        binding.saveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewModel.save();
+        binding.startDateTextLayout.setEndIconOnClickListener(v -> {
+            if (getActivity() != null) {
+                final AppDatePicker.DatePickerFragment datePickerFragment = new AppDatePicker.DatePickerFragment(START_DATE_PICKER_FRAGMENT,this);
+                datePickerFragment.show(getActivity().getSupportFragmentManager(), START_DATE_PICKER_FRAGMENT);
             }
         });
+        binding.expectedDateTextLayout.setEndIconOnClickListener(v -> {
+            if (getActivity() != null) {
+                final AppDatePicker.DatePickerFragment datePickerFragment = new AppDatePicker.DatePickerFragment(EXPECTED_DATE_PICKER_FRAGMENT,this);
+                datePickerFragment.show(getActivity().getSupportFragmentManager(), EXPECTED_DATE_PICKER_FRAGMENT);
+            }
+        });
+        binding.saveBtn.setOnClickListener(v -> viewModel.save());
         return binding.getRoot();
 
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel.getNameState().observe(this.getViewLifecycleOwner(), isError -> {
-            if (isError != null && isError) {
-                binding.nameTextLayout.setError(getResources().getString(R.string.provide_name_of_hike));
-            } else {
-                binding.nameTextLayout.setError(null);
-            }
-        });
-        viewModel.getLengthState().observe(this.getViewLifecycleOwner(), isError -> {
-            if (isError != null && isError) {
-                binding.lengthTextLayout.setError(getResources().getString(R.string.provide_length_of_hike));
-            } else {
-                binding.lengthTextLayout.setError(null);
-            }
-        });
-        viewModel.getStartDateState().observe(this.getViewLifecycleOwner(), isError -> {
-            if (isError != null && isError) {
-                binding.startDateTextLayout.setError(getResources().getString(R.string.enter_valid_date_format));
-            } else {
-                binding.startDateTextLayout.setError(null);
-            }
-        });
-        viewModel.getExpectedDateState().observe(this.getViewLifecycleOwner(), isError -> {
-            if (isError != null && isError) {
-                binding.expectedDateTextLayout.setError(getResources().getString(R.string.enter_valid_date_format));
-            } else {
-                binding.expectedDateTextLayout.setError(null);
-            }
-        });
-        viewModel.getIsBtnEnableState().observe(this.getViewLifecycleOwner(), isEnable -> {
+        checkEditTextErrorState(this.getViewLifecycleOwner(), viewModel.isNameEmpty, binding.nameTextLayout, getResources().getString(R.string.provide_name_of_hike));
+        checkEditTextErrorState(this.getViewLifecycleOwner(), viewModel.isLengthEmpty, binding.lengthTextLayout, getResources().getString(R.string.provide_length_of_hike));
+        checkEditTextErrorState(this.getViewLifecycleOwner(), viewModel.isStartDateFormatCorrect, binding.startDateTextLayout, getResources().getString(R.string.enter_valid_date_format));
+        checkEditTextErrorState(this.getViewLifecycleOwner(), viewModel.isExpectedDateFormatCorrect, binding.expectedDateTextLayout, getResources().getString(R.string.enter_valid_date_format));
+        viewModel.getBtnEnableState.observe(this.getViewLifecycleOwner(), isEnable -> {
             binding.saveBtn.setEnabled(isEnable);
         });
-        viewModel.getSaveHikeInfoState().observe(this.getViewLifecycleOwner(), isSuccess -> {
+        viewModel.getUiState.observe(this.getViewLifecycleOwner(), isSuccess -> {
             if (isSuccess != null) {
                 if (isSuccess) {
                     final NavController navController = Navigation.findNavController(view);
@@ -124,6 +112,25 @@ public class NewHikingFragment extends Fragment {
         binding = null;
     }
 
+    private void checkEditTextErrorState(@NonNull LifecycleOwner lifecycleOwner, LiveData<Boolean> isError, TextInputLayout inputLayout, String errorMessage) {
+        isError.observe(lifecycleOwner, error -> {
+            if (error != null && error) {
+                inputLayout.setError(errorMessage);
+            } else  {
+                inputLayout.setError(null);
+            }
+        });
+    }
+
+    private void setupTextListener() {
+        binding.nameEditText.addTextChangedListener(new InputTextWatcher(s -> viewModel.setName(s)));
+        binding.latitudeEditText.addTextChangedListener(new InputTextWatcher(s -> viewModel.setLatitude(s)));
+        binding.longitudeEditText.addTextChangedListener(new InputTextWatcher(s -> viewModel.setLongitude(s)));
+        binding.lengthEditText.addTextChangedListener(new InputTextWatcher(s -> viewModel.setLength(s)));
+        binding.startDateEditText.addTextChangedListener(new InputTextWatcher(s -> viewModel.setStartDate(s)));
+        binding.expectedDateEditText.addTextChangedListener(new InputTextWatcher(s -> viewModel.setExpectedDate(s)));
+    }
+
     private void setupLevelDropDown(Context context) {
         final HikingLevel[] levels = HikingLevel.values();
         final String[] items = new String[levels.length];
@@ -143,116 +150,24 @@ public class NewHikingFragment extends Fragment {
         });
     }
 
-    private void setupNameOfHikeTextListener() {
-        binding.nameEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                viewModel.setName(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-    }
-
-    private void setupLengthOfHikeTextListener() {
-        binding.lengthEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                viewModel.setLength(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-    }
-
-    private void setupStartDateTextListener() {
-        binding.startDateEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                viewModel.setStartDate(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-    }
-
-    private void setupExpectedDateTextListener() {
-        binding.expectedDateEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                viewModel.setExpectedDate(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-    }
-
-    private void setupLatitudeTextListener() {
-        binding.latitudeEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                viewModel.setLatitude(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-    }
-
-    private void setupLongitudeTextListener() {
-        binding.longitudeEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                viewModel.setLongitude(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-    }
-
     private void setupParkingAvailableListener() {
-        binding.parkingAvailableSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                                                                      @Override
-                                                                      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                                                                          viewModel.setParkingAvailable(isChecked);
-                                                                      }
-                                                                  }
+        binding.parkingAvailableSwitch.setOnCheckedChangeListener(
+                (buttonView, isChecked) -> viewModel.setParkingAvailable(isChecked)
         );
     }
 
+    @Override
+    public void onDateSet(String date, String tag) {
+        if (tag.equals(START_DATE_PICKER_FRAGMENT)) {
+            setEditText(binding.startDateEditText, date);
+        }
+        if (tag.equals(EXPECTED_DATE_PICKER_FRAGMENT)) {
+            setEditText(binding.expectedDateEditText, date);
+        }
+    }
+
+    private void setEditText(EditText view, String text) {
+        view.setText(text, TextView.BufferType.EDITABLE);
+        view.setSelection(text.length());
+    }
 }

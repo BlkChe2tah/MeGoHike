@@ -7,8 +7,8 @@
     app:strokeWidth="0dp"
     app:cardCornerRadius="8dp"
     android:layout_marginEnd="@dimen/edge_inset_large"
-    android:layout_width="120dp"
-    android:layout_height="180dp">
+    android:layout_width="160dp"
+    android:layout_height="213dp">
 
     <LinearLayout
         android:id="@+id/observationNewContainer"
@@ -67,7 +67,7 @@
                 <ImageView
                     android:src="@drawable/round_access_time_24"
                     app:tint="?attr/colorOnSecondaryContainer"
-                    android:alpha="0.5"
+                    android:alpha="0.3"
                     android:layout_width="16dp"
                     android:layout_height="16dp"/>
 
@@ -77,6 +77,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="2dp"
                     android:alpha="0.5"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:textAppearance="?attr/textAppearanceLabelSmall"
                     android:textColor="?attr/colorOnSecondaryContainer"
                     tools:text="Yangon" />
@@ -104,7 +106,7 @@
                 tools:text="Yangon"
                 android:maxLines="4"
                 android:ellipsize="end"
-                android:alpha="0.5"
+                android:alpha="0.7"
                 android:textColor="?attr/colorOnSecondaryContainer"
                 android:layout_height="wrap_content"/>
         </RelativeLayout>

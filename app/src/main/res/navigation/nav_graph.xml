@@ -35,10 +35,28 @@
         <action
             android:id="@+id/action_hikingDetailFragment_to_newObservationFragment"
             app:destination="@id/newObservationFragment" />
+        <action
+            android:id="@+id/action_hikingDetailFragment_to_newEquipmentFragment"
+            app:destination="@id/newEquipmentFragment" />
     </fragment>
     <fragment
         android:id="@+id/newObservationFragment"
         tools:layout="@layout/fragment_new_observation"
         android:name="com.example.megohike.presentation.new_observation.NewObservationFragment"
-        android:label="@string/fragment_new_observation" />
+        android:label="@string/fragment_new_observation" >
+        <argument
+            android:name="infoId"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/newEquipmentFragment"
+        tools:layout="@layout/fragment_new_equipment"
+        android:name="com.example.megohike.presentation.new_equipment.NewEquipmentFragment"
+        android:label="@string/fragment_new_Equipment">
+        <argument
+            android:name="infoId"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 </navigation>

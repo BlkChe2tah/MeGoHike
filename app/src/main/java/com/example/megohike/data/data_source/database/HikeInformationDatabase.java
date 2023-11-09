@@ -8,6 +8,7 @@ import androidx.room.RoomDatabase;
 
 import com.example.megohike.data.data_source.database.dao.EquipmentDao;
 import com.example.megohike.data.data_source.database.dao.HikeInformationDao;
+import com.example.megohike.data.data_source.database.dao.ObservationDao;
 import com.example.megohike.data.data_source.database.entities.Equipment;
 import com.example.megohike.data.data_source.database.entities.HikeInfo;
 import com.example.megohike.data.data_source.database.entities.Observation;
@@ -20,6 +21,7 @@ public abstract class HikeInformationDatabase extends RoomDatabase {
 
     public abstract HikeInformationDao hikeInformationDao();
     public abstract EquipmentDao equipmentDao();
+    public abstract ObservationDao observationDao();
 
     private static volatile HikeInformationDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;

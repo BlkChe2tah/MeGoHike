@@ -1,6 +1,7 @@
 package com.example.megohike.data.data_source.database.entities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -27,10 +28,11 @@ public class Observation {
     @NonNull
     private String observation;
     private String image;
-    private int time;
+    @NonNull
+    private long time;
     private String comment;
 
-    public Observation(int observationId, @NonNull int hikeInfoId, @NonNull String observation, String image, int time, String comment) {
+    public Observation(int observationId, @NonNull int hikeInfoId, @NonNull String observation, String image, @NonNull long time, String comment) {
         this.observationId = observationId;
         this.hikeInfoId = hikeInfoId;
         this.observation = observation;
@@ -56,11 +58,11 @@ public class Observation {
         this.image = image;
     }
 
-    public int getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(long time) {
         this.time = time;
     }
 
