@@ -14,8 +14,6 @@ import com.example.megohike.data.data_source.database.entities.HikeInfo;
 import com.example.megohike.domain.use_case.AddNewHikeInfoUseCase;
 
 public class NewHikingViewModel extends ViewModel {
-
-    final private AddNewHikeInfoUseCase useCase;
     final private MutableLiveData<String> name = new MutableLiveData<>(null);
     final public LiveData<Boolean> isNameEmpty = Transformations.map(name, this::isBlankString);
     final private MutableLiveData<String> length = new MutableLiveData<>(null);
@@ -27,13 +25,10 @@ public class NewHikingViewModel extends ViewModel {
     final private MutableLiveData<String> expectedDate = new MutableLiveData<>(null);
     final public LiveData<Boolean> isExpectedDateFormatCorrect = Transformations.map(expectedDate, this::checkDateFormatIncorrect);
     final private MutableLiveData<Integer> hikingLevel = new MutableLiveData<>(0);
-    final private MutableLiveData<Boolean> parkingAvailable = new MutableLiveData<>(false);
     final private MediatorLiveData<Boolean> btnEnableState = new MediatorLiveData<>(false);
     final public LiveData<Boolean> getBtnEnableState = btnEnableState;
-    final private MutableLiveData<Boolean> uiState = new MutableLiveData<>(null);
-    final public LiveData<Boolean> getUiState = uiState;
-    public NewHikingViewModel(@NonNull AddNewHikeInfoUseCase useCase) {
-        this.useCase = useCase;
+
+    public NewHikingViewModel() {
         btnEnableState.addSource(isNameEmpty, state -> {btnEnableState.postValue(checkBtnState());});
         btnEnableState.addSource(isLengthEmpty, state -> {btnEnableState.postValue(checkBtnState());});
         btnEnableState.addSource(isStartDateFormatCorrect, state -> {btnEnableState.postValue(checkBtnState());});
@@ -68,33 +63,19 @@ public class NewHikingViewModel extends ViewModel {
         this.hikingLevel.postValue(level);
     }
 
-    public void setParkingAvailable(Boolean isAvailable) {
-        this.parkingAvailable.postValue(isAvailable);
-    }
-
-    public void save() {
-        HikeInformationDatabase.databaseWriteExecutor.execute(() ->{
-        try {
-            final long startTime = InputDateConverter.covert(startDate.getValue());
-            final long expectedTime = InputDateConverter.covert(expectedDate.getValue());
-            final int parkingAvailableValue = parkingAvailable.getValue() != null && parkingAvailable.getValue() ? 1 : 0;
-            final HikeInfo data = new HikeInfo(
-                    0,
-                    name.getValue() == null ? "" : name.getValue(),
-                    latitude.getValue(),
-                    longitude.getValue(),
-                    startTime,
-                    expectedTime,
-                    parkingAvailableValue,
-                    length.getValue() == null ? 0 :  Double.parseDouble(length.getValue()),
-                    hikingLevel.getValue() == null ? 0 : hikingLevel.getValue()
-            );
-            useCase.insertHikeInfo(data);
-            uiState.postValue(true);
-        } catch (NumberFormatException e) {
-            uiState.postValue(false);
-        }
-        });
+    public HikeInfo getNewHikingData(int hikeInfoId) {
+        final long startTime = InputDateConverter.covert(startDate.getValue());
+        final long expectedTime = InputDateConverter.covert(expectedDate.getValue());
+        return new HikeInfo(
+                hikeInfoId,
+                name.getValue() == null ? "" : name.getValue(),
+                latitude.getValue(),
+                longitude.getValue(),
+                startTime,
+                expectedTime,
+                length.getValue() == null ? 0 :  Double.parseDouble(length.getValue()),
+                hikingLevel.getValue() == null ? 0 : hikingLevel.getValue()
+        );
     }
 
     private Boolean checkBtnState() {

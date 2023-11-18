@@ -125,39 +125,6 @@
                                 android:textColor="?attr/colorOnSurfaceVariant"/>
 
                         </LinearLayout>
-
-                        <View
-                            android:layout_width="0.6dp"
-                            android:layout_height="match_parent"
-                            android:alpha="0.5"
-                            android:background="?attr/colorOnSurface"/>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="1"
-                            android:gravity="center_horizontal"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/hikingInfoParkingAvailable"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="?attr/colorOnPrimaryContainer"
-                                android:textAppearance="?attr/textAppearanceTitleMedium"
-                                tools:text="Yes"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/edge_inset_small"
-                                android:text="@string/parking_available"
-                                android:textAppearance="?attr/textAppearanceLabelSmall"
-                                android:textColor="?attr/colorOnSurfaceVariant"/>
-
-                        </LinearLayout>
-
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -372,12 +339,23 @@
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/deleteBtn"
-                android:layout_marginVertical="@dimen/edge_inset_large"
-                android:text="@string/delete"
+                android:id="@+id/editBtn"
+                android:layout_marginTop="@dimen/edge_inset_large"
+                android:text="@string/edit"
                 app:cornerRadius="4dp"
                 android:layout_marginHorizontal="@dimen/edge_inset_large"
-                app:backgroundTint="?attr/colorError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/deleteBtn"
+                android:text="@string/delete"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_marginTop="@dimen/edge_inset_medium"
+                app:cornerRadius="4dp"
+                app:strokeColor="?attr/colorError"
+                android:textColor="?attr/colorError"
+                android:layout_marginHorizontal="@dimen/edge_inset_large"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

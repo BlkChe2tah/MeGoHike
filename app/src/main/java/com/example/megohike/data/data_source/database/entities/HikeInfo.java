@@ -22,8 +22,6 @@ public class HikeInfo {
     private long startDate;
     @ColumnInfo(name = "expected_date")
     private long expectedDate;
-    @ColumnInfo(name = "parking_available")
-    private int parkingAvailable;
     @ColumnInfo(name = "length_of_hike")
     private Double lengthOfHike = 0.0;
     @ColumnInfo(name = "level_of_difficulty")
@@ -36,7 +34,6 @@ public class HikeInfo {
             @Nullable String longitude,
             long startDate,
             long expectedDate,
-            int parkingAvailable,
             @NonNull Double lengthOfHike,
             int levelOfDifficulty
     ) {
@@ -46,7 +43,6 @@ public class HikeInfo {
         this.longitude = longitude;
         this.startDate = startDate;
         this.expectedDate = expectedDate;
-        this.parkingAvailable = parkingAvailable;
         this.lengthOfHike = lengthOfHike;
         this.levelOfDifficulty = levelOfDifficulty;
     }
@@ -92,14 +88,6 @@ public class HikeInfo {
 
     public void setExpectedDate(long expectedDate) {
         this.expectedDate = expectedDate;
-    }
-
-    public int getParkingAvailable() {
-        return parkingAvailable;
-    }
-
-    public void setParkingAvailable(int parkingAvailable) {
-        this.parkingAvailable = parkingAvailable;
     }
 
     public Double getLengthOfHike() {

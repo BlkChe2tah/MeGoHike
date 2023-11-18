@@ -27,13 +27,13 @@
         android:text="@string/no_hiking_data"
         android:textAlignment="center"
         android:textColor="?attr/colorOnSurfaceVariant"
-        app:layout_constraintBottom_toTopOf="@+id/addNewBtn"
+        app:layout_constraintBottom_toTopOf="@+id/addNewHikeInfoBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/addNewBtn"
+        android:id="@+id/addNewHikeInfoBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/edge_inset_large"

@@ -27,14 +27,19 @@ import androidx.navigation.Navigation;
 
 import com.example.megohike.R;
 import com.example.megohike.common.AppDatePicker;
+import com.example.megohike.common.InputDateConverter;
 import com.example.megohike.common.InputTextWatcher;
 import com.example.megohike.data.data_source.database.HikeInformationDatabase;
+import com.example.megohike.data.data_source.database.entities.HikeInfo;
 import com.example.megohike.data.use_case.AddNewHikeInfoUseCaseImpl;
 import com.example.megohike.databinding.FragmentNewHikingBinding;
 import com.example.megohike.domain.HikingLevel;
+import com.example.megohike.presentation.hiking_detail.HikingDetailFragmentArgs;
+import com.example.megohike.presentation.hiking_list.HikingListFragmentDirections;
 import com.example.megohike.presentation.new_hiking.view_model.NewHikingViewModel;
 import com.example.megohike.presentation.new_hiking.view_model.NewHikingViewModelFactory;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
 
 public class NewHikingFragment extends Fragment implements AppDatePicker.DateSetListener {
 
@@ -42,16 +47,23 @@ public class NewHikingFragment extends Fragment implements AppDatePicker.DateSet
     private static final String EXPECTED_DATE_PICKER_FRAGMENT = "EXPECTED_DATE_PICKER";
 
     private FragmentNewHikingBinding binding;
-
+    private HikeInfo hikeInfo = null;
+    private String type = "new";
     private NewHikingViewModel viewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final HikeInformationDatabase database = HikeInformationDatabase.getDatabase(getContext());
         viewModel = new ViewModelProvider(
-                this, new NewHikingViewModelFactory(new AddNewHikeInfoUseCaseImpl(database))
+                this, new NewHikingViewModelFactory()
         ).get(NewHikingViewModel.class);
+        final Gson gson = new Gson();
+        String string = NewHikingFragmentArgs.fromBundle(getArguments()).getHikeInfo();
+        String mType = NewHikingFragmentArgs.fromBundle(getArguments()).getType();
+        type = mType == null ? "new" : mType;
+        if (string != null) {
+            hikeInfo = gson.fromJson(string, HikeInfo.class);
+        }
     }
 
     @Override
@@ -62,7 +74,6 @@ public class NewHikingFragment extends Fragment implements AppDatePicker.DateSet
         binding = FragmentNewHikingBinding.inflate(inflater, container, false);
         setupTextListener();
         setupLevelDropDown(getContext());
-        setupParkingAvailableListener();
         binding.startDateTextLayout.setEndIconOnClickListener(v -> {
             if (getActivity() != null) {
                 final AppDatePicker.DatePickerFragment datePickerFragment = new AppDatePicker.DatePickerFragment(START_DATE_PICKER_FRAGMENT,this);
@@ -75,34 +86,28 @@ public class NewHikingFragment extends Fragment implements AppDatePicker.DateSet
                 datePickerFragment.show(getActivity().getSupportFragmentManager(), EXPECTED_DATE_PICKER_FRAGMENT);
             }
         });
-        binding.saveBtn.setOnClickListener(v -> viewModel.save());
+        binding.saveBtn.setOnClickListener(v -> {
+            final Gson gson = new Gson();
+            final HikeInfo data = viewModel.getNewHikingData(hikeInfo == null ? 0 : hikeInfo.getHikeInfoId());
+            Navigation.findNavController(v).navigate(
+                    NewHikingFragmentDirections.actionNewHikingFragmentToNewHikingConfirmFragment(gson.toJson(data), type)
+            );
+        });
         return binding.getRoot();
 
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (hikeInfo != null) {
+            setUpData();
+        }
         checkEditTextErrorState(this.getViewLifecycleOwner(), viewModel.isNameEmpty, binding.nameTextLayout, getResources().getString(R.string.provide_name_of_hike));
         checkEditTextErrorState(this.getViewLifecycleOwner(), viewModel.isLengthEmpty, binding.lengthTextLayout, getResources().getString(R.string.provide_length_of_hike));
         checkEditTextErrorState(this.getViewLifecycleOwner(), viewModel.isStartDateFormatCorrect, binding.startDateTextLayout, getResources().getString(R.string.enter_valid_date_format));
         checkEditTextErrorState(this.getViewLifecycleOwner(), viewModel.isExpectedDateFormatCorrect, binding.expectedDateTextLayout, getResources().getString(R.string.enter_valid_date_format));
         viewModel.getBtnEnableState.observe(this.getViewLifecycleOwner(), isEnable -> {
             binding.saveBtn.setEnabled(isEnable);
-        });
-        viewModel.getUiState.observe(this.getViewLifecycleOwner(), isSuccess -> {
-            if (isSuccess != null) {
-                if (isSuccess) {
-                    final NavController navController = Navigation.findNavController(view);
-                    final NavBackStackEntry backStack = navController.getPreviousBackStackEntry();
-                    if (backStack != null) {
-                        backStack.getSavedStateHandle().set("back_result", true);
-                    }
-                    navController.popBackStack();
-                    Toast.makeText(getContext(), "Data was successfully saved", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "Unexpected error occurred while saving data", Toast.LENGTH_SHORT).show();
-                }
-            }
         });
     }
 
@@ -150,10 +155,14 @@ public class NewHikingFragment extends Fragment implements AppDatePicker.DateSet
         });
     }
 
-    private void setupParkingAvailableListener() {
-        binding.parkingAvailableSwitch.setOnCheckedChangeListener(
-                (buttonView, isChecked) -> viewModel.setParkingAvailable(isChecked)
-        );
+    private void setUpData() {
+        binding.nameEditText.setText(hikeInfo.getNameOfHike(), TextView.BufferType.EDITABLE);
+        binding.latitudeEditText.setText(hikeInfo.getLatitude(), TextView.BufferType.EDITABLE);
+        binding.longitudeEditText.setText(hikeInfo.getLongitude(), TextView.BufferType.EDITABLE);
+        binding.lengthEditText.setText(hikeInfo.getLengthOfHike().toString(), TextView.BufferType.EDITABLE);
+        binding.startDateEditText.setText(InputDateConverter.convertDate(hikeInfo.getStartDate()), TextView.BufferType.EDITABLE);
+        binding.expectedDateEditText.setText(InputDateConverter.convertDate(hikeInfo.getExpectedDate()), TextView.BufferType.EDITABLE);
+        binding.levelDropDown.setSelection(hikeInfo.getLevelOfDifficulty());
     }
 
     @Override

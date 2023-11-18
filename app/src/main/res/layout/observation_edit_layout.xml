@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="@dimen/edge_inset_large"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/observationTime"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textAppearance="?attr/textAppearanceLabelLarge"
+            android:layout_width="match_parent"
+            android:alpha="0.5"
+            android:layout_marginBottom="@dimen/edge_inset_small"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/observationName"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textAppearance="?attr/textAppearanceTitleLarge"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="@dimen/edge_inset_medium"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/observationComment"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textAppearance="?attr/textAppearanceBodyLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <View
+        android:alpha="0.6"
+        android:background="?attr/colorOutline"
+        android:layout_width="match_parent"
+        android:layout_height="0.8dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/observationEditBtn"
+        android:text="@string/edit"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <View
+        android:alpha="0.6"
+        android:background="?attr/colorOutline"
+        android:layout_width="match_parent"
+        android:layout_height="0.8dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/observationDeleteBtn"
+        android:text="@string/delete"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:textColor="?attr/colorError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

@@ -23,6 +23,7 @@ import com.example.megohike.common.AppTimePicker;
 import com.example.megohike.common.InputTextWatcher;
 import com.example.megohike.common.InputTimeConverter;
 import com.example.megohike.data.data_source.database.HikeInformationDatabase;
+import com.example.megohike.data.data_source.database.entities.Equipment;
 import com.example.megohike.data.use_case.AddNewEquipmentUseCaseImpl;
 import com.example.megohike.data.use_case.AddNewObservationUseCaseImpl;
 import com.example.megohike.databinding.FragmentNewEquipmentBinding;
@@ -33,12 +34,14 @@ import com.example.megohike.presentation.new_observation.NewObservationFragmentA
 import com.example.megohike.presentation.new_observation.view_model.NewObservationViewModel;
 import com.example.megohike.presentation.new_observation.view_model.NewObservationViewModelFactory;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
 
 public class NewEquipmentFragment extends Fragment {
 
     private FragmentNewEquipmentBinding binding;
     private NewEquipmentViewModel viewModel;
     private String hikeInfoId = "0";
+    private Equipment equipment = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,12 @@ public class NewEquipmentFragment extends Fragment {
                 this, new NewEquipmentViewModelFactory(new AddNewEquipmentUseCaseImpl(database))
         ).get(NewEquipmentViewModel.class);
         hikeInfoId = NewEquipmentFragmentArgs.fromBundle(getArguments()).getInfoId();
+        final String equipmentData = NewEquipmentFragmentArgs.fromBundle(getArguments()).getEquipmentData();
+        if (equipmentData != null) {
+            final Gson gson = new Gson();
+            equipment = gson.fromJson(equipmentData, Equipment.class);
+            hikeInfoId = Integer.toString(equipment.getHikeInfoId());
+        }
     }
 
     @Override
@@ -58,11 +67,13 @@ public class NewEquipmentFragment extends Fragment {
         binding.saveBtn.setOnClickListener(v -> {
             final int id = Integer.parseInt(hikeInfoId);
             if (id != 0) {
-                viewModel.save(id);
+                final int equipmentId = equipment == null ? 0 : equipment.getEquipmentId();
+                viewModel.save(id, equipmentId);
             } else {
                 Toast.makeText(getContext(), "Unexpected error occurred", Toast.LENGTH_SHORT).show();
             }
         });
+        setupView();
         return binding.getRoot();
     }
 
@@ -104,6 +115,13 @@ public class NewEquipmentFragment extends Fragment {
     private void setupTextListener() {
         binding.nameEditText.addTextChangedListener(new InputTextWatcher(s -> viewModel.setName(s)));
         binding.countEditText.addTextChangedListener(new InputTextWatcher(s -> viewModel.setCount(s)));
+    }
+
+    private void setupView() {
+        if (equipment != null) {
+            binding.nameEditText.setText(equipment.getName(), TextView.BufferType.EDITABLE);
+            binding.countEditText.setText(String.format("%d", equipment.getCount()), TextView.BufferType.EDITABLE);
+        }
     }
 
 }

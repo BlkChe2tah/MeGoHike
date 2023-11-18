@@ -5,6 +5,7 @@
     <string name="fragment_new_hiking">New hiking activity</string>
     <string name="fragment_new_observation">New Observation</string>
     <string name="fragment_new_Equipment">New Equipment</string>
+    <string name="fragment_confirm">Confirm</string>
     <string name="add_new">Add New</string>
     <!-- message -->
     <string name="no_hiking_data">Unfortunately, there is no available data on hiking activities at this time.</string>
@@ -40,7 +41,12 @@
     <string name="observation">Observation *</string>
     <string name="equipments_and_gears">Equipments and Gears</string>
     <string name="add_new_equipment_and_gear">Add New Equipment and Gear</string>
+    <string name="equipment_and_gear">Equipment and Gear</string>
     <string name="equipment">Equipment</string>
     <string name="count">Count</string>
     <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="search">search...</string>
 </resources>

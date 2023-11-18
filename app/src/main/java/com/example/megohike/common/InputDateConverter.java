@@ -11,13 +11,14 @@ import java.util.regex.Pattern;
 public class InputDateConverter {
     @SuppressLint("SimpleDateFormat")
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+    private static final SimpleDateFormat FORMAT_TIME_S = new SimpleDateFormat("hh:mm aaa");
 
     @SuppressLint("SimpleDateFormat")
     private static final SimpleDateFormat FORMAT_TIME = new SimpleDateFormat("dd/MM/yyyy hh:mm aaa");
 
     @SuppressLint("SimpleDateFormat")
     private static final SimpleDateFormat FORMAT2 = new SimpleDateFormat("d MMM yyyy");
-    private static final SimpleDateFormat FORMAT2_TIME = new SimpleDateFormat("d MMM yyyy hh:mm aaa");
+    private static final SimpleDateFormat FORMAT2_TIME = new SimpleDateFormat("d MMM yyyy h:mm aaa");
 
     public static long covert(String inputDate) {
         try {
@@ -48,6 +49,30 @@ public class InputDateConverter {
     public static String convertTimeToDateString(Long time) {
         try {
             return FORMAT2.format(new Date(time));
+        } catch (NumberFormatException e) {
+            return "0";
+        }
+    }
+
+    public static String convertDate(Long time) {
+        try {
+            return FORMAT.format(new Date(time));
+        } catch (NumberFormatException e) {
+            return "0";
+        }
+    }
+
+    public static String getDate(Long time) {
+        try {
+            return FORMAT.format(new Date(time));
+        } catch (NumberFormatException e) {
+            return "0";
+        }
+    }
+
+    public static String getTime(Long time) {
+        try {
+            return FORMAT_TIME_S.format(new Date(time));
         } catch (NumberFormatException e) {
             return "0";
         }

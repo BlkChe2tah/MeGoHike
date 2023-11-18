@@ -23,18 +23,23 @@ import android.widget.Toast;
 import com.example.megohike.R;
 import com.example.megohike.common.AppDatePicker;
 import com.example.megohike.common.AppTimePicker;
+import com.example.megohike.common.InputDateConverter;
 import com.example.megohike.common.InputTextWatcher;
 import com.example.megohike.common.InputTimeConverter;
 import com.example.megohike.data.data_source.database.HikeInformationDatabase;
+import com.example.megohike.data.data_source.database.entities.Equipment;
+import com.example.megohike.data.data_source.database.entities.Observation;
 import com.example.megohike.data.use_case.AddNewHikeInfoUseCaseImpl;
 import com.example.megohike.data.use_case.AddNewObservationUseCaseImpl;
 import com.example.megohike.databinding.FragmentNewObservationBinding;
 import com.example.megohike.presentation.hiking_detail.HikingDetailFragmentArgs;
+import com.example.megohike.presentation.new_equipment.NewEquipmentFragmentArgs;
 import com.example.megohike.presentation.new_hiking.view_model.NewHikingViewModel;
 import com.example.megohike.presentation.new_hiking.view_model.NewHikingViewModelFactory;
 import com.example.megohike.presentation.new_observation.view_model.NewObservationViewModel;
 import com.example.megohike.presentation.new_observation.view_model.NewObservationViewModelFactory;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
 
 public class NewObservationFragment extends Fragment implements AppDatePicker.DateSetListener, AppTimePicker.TimeSetListener {
 
@@ -44,6 +49,7 @@ public class NewObservationFragment extends Fragment implements AppDatePicker.Da
     private FragmentNewObservationBinding binding;
     private NewObservationViewModel viewModel;
     private String hikeInfoId = "0";
+    private Observation observation = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,6 +59,12 @@ public class NewObservationFragment extends Fragment implements AppDatePicker.Da
                 this, new NewObservationViewModelFactory(new AddNewObservationUseCaseImpl(database))
         ).get(NewObservationViewModel.class);
         hikeInfoId = NewObservationFragmentArgs.fromBundle(getArguments()).getInfoId();
+        final String observationData = NewObservationFragmentArgs.fromBundle(getArguments()).getObservationData();
+        if (observationData != null) {
+            final Gson gson = new Gson();
+            observation = gson.fromJson(observationData, Observation.class);
+            hikeInfoId = Integer.toString(observation.getHikeInfoId());
+        }
     }
 
     @Override
@@ -75,11 +87,13 @@ public class NewObservationFragment extends Fragment implements AppDatePicker.Da
         binding.saveBtn.setOnClickListener(v -> {
             final int id = Integer.parseInt(hikeInfoId);
             if (id != 0) {
-                viewModel.save(id);
+                final int observationId = observation == null ? 0 : observation.getObservationId();
+                viewModel.save(id, observationId);
             } else {
                 Toast.makeText(getContext(), "Unexpected error occurred", Toast.LENGTH_SHORT).show();
             }
         });
+        setupView();
         return binding.getRoot();
     }
 
@@ -137,6 +151,15 @@ public class NewObservationFragment extends Fragment implements AppDatePicker.Da
         final String result = InputTimeConverter.convert24to12(time);
         binding.timeEditText.setText(result, TextView.BufferType.EDITABLE);
         binding.timeEditText.setSelection(result.length());
+    }
+
+    private void setupView() {
+        if (observation != null) {
+            binding.nameEditText.setText(observation.getObservation(), TextView.BufferType.EDITABLE);
+            binding.dateEditText.setText(InputDateConverter.getDate(observation.getTime()), TextView.BufferType.EDITABLE);
+            binding.timeEditText.setText(InputDateConverter.getTime(observation.getTime()), TextView.BufferType.EDITABLE);
+            binding.commentEditText.setText(observation.getComment(), TextView.BufferType.EDITABLE);
+        }
     }
 
 }

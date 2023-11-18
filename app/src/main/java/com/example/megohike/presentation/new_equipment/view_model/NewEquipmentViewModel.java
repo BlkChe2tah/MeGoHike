@@ -34,12 +34,12 @@ public class NewEquipmentViewModel extends ViewModel {
         btnEnableState.addSource(isCountCorrect, state -> {btnEnableState.postValue(checkBtnState());});
     }
 
-    public void save(int hikeInfoId) {
+    public void save(int hikeInfoId, int equipmentId) {
         HikeInformationDatabase.databaseWriteExecutor.execute(() ->{
         try {
             useCase.insertEquipment(
                     new Equipment(
-                            0,
+                            equipmentId,
                             hikeInfoId,
                             name.getValue() == null ? "" : name.getValue(),
                             count.getValue() == null ? 0 : Integer.parseInt(count.getValue())

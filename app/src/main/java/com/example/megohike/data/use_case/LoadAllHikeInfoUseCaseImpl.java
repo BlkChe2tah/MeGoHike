@@ -22,4 +22,8 @@ public class LoadAllHikeInfoUseCaseImpl implements LoadAllHikeInfoUseCase {
         return db.hikeInformationDao().getAll();
     }
 
+    @Override
+    public List<HikeInfo> getAllHikeInfoByName(String name) {
+        return db.hikeInformationDao().getHikeByName(name);
+    }
 }

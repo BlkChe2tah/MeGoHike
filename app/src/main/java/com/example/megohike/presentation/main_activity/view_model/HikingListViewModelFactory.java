@@ -1,4 +1,6 @@
-package com.example.megohike.presentation.hiking_list.view_model;
+package com.example.megohike.presentation.main_activity.view_model;
+
+import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;

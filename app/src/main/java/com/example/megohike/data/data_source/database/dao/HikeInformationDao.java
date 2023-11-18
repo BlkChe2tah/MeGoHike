@@ -6,6 +6,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Upsert;
 
 import com.example.megohike.data.data_source.database.entities.HikeInfo;
 
@@ -16,7 +17,13 @@ public interface HikeInformationDao {
     @Query("SELECT * FROM hike_infos")
     List<HikeInfo> getAll();
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Query("SELECT * FROM hike_infos WHERE name_of_hike LIKE '%' || :name || '%'")
+    List<HikeInfo> getHikeByName(String name);
+
+    @Query("SELECT * FROM hike_infos WHERE id = :hikeId")
+    HikeInfo get(int hikeId);
+
+    @Upsert()
     void insert(HikeInfo info);
 
     @Query("DELETE FROM hike_infos WHERE id = :hikeId")

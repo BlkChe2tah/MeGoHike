@@ -1,6 +1,6 @@
 package com.example.megohike.common;
 
-public final class UiStateError<String> extends  UiState<String>{
+public final class UiStateError extends  UiState{
     private final String message;
 
     public UiStateError(String message) {

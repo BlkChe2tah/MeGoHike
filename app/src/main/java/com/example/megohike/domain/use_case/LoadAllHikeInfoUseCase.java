@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface LoadAllHikeInfoUseCase {
     List<HikeInfo> getAllHikeInfo();
+    List<HikeInfo> getAllHikeInfoByName(String  name);
 }

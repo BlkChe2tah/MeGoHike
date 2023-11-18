@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false">
+
+    <LinearLayout
+        android:id="@+id/contentLayout"
+        android:orientation="vertical"
+        android:padding="@dimen/edge_inset_large"
+        android:background="?android:colorBackground"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="@string/name_of_hike"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceBodyLarge"
+            android:textColor="?attr/colorOnSurfaceVariant" />
+
+        <TextView
+            android:id="@+id/hikingInfoName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/edge_inset_medium"
+            android:textAppearance="?attr/textAppearanceHeadlineMedium"
+            android:textColor="?attr/colorOnPrimaryContainer"
+            tools:text="Yangon"/>
+
+            <LinearLayout
+                android:paddingVertical="@dimen/edge_inset_small"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:text="@string/latitude"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/hikingInfoLatitude"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    android:layout_width="0dp"
+                    android:textAlignment="textEnd"
+                    android:layout_weight="1"
+                    tools:text="12324 - 45464"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:paddingVertical="@dimen/edge_inset_small"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:text="@string/longitude"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/hikingInfoLongitude"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    android:layout_width="0dp"
+                    android:textAlignment="textEnd"
+                    android:layout_weight="1"
+                    tools:text="12324 - 45464"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:paddingVertical="@dimen/edge_inset_small"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:text="@string/start_date_detail"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/hikingInfoStartDate"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    android:layout_width="0dp"
+                    android:textAlignment="textEnd"
+                    android:layout_weight="1"
+                    tools:text="12324 - 45464"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:paddingVertical="@dimen/edge_inset_small"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:text="@string/expected_end_date_detail"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/hikingInfoEndDate"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    android:layout_width="0dp"
+                    android:textAlignment="textEnd"
+                    android:layout_weight="1"
+                    tools:text="12324 - 45464"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+        <LinearLayout
+                android:paddingVertical="@dimen/edge_inset_small"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:text="@string/length_of_hike"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/hikingInfoLength"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    android:layout_width="0dp"
+                    android:textAlignment="textEnd"
+                    android:layout_weight="1"
+                    tools:text="12324 - 45464"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+        <LinearLayout
+                android:paddingVertical="@dimen/edge_inset_small"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:text="@string/level_of_difficulty"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/hikingInfoLevel"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    android:layout_width="0dp"
+                    android:textAlignment="textEnd"
+                    android:layout_weight="1"
+                    tools:text="12324 - 45464"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/confirmBtn"
+            android:text="@string/confirm"
+            app:cornerRadius="4dp"
+            android:layout_marginTop="@dimen/edge_inset_large"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancelBtn"
+            android:text="@string/cancel"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            app:cornerRadius="4dp"
+            android:layout_marginTop="@dimen/edge_inset_medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -37,13 +37,13 @@ public class NewObservationViewModel extends ViewModel {
         btnEnableState.addSource(isTimeFormatCorrect, state -> {btnEnableState.postValue(checkBtnState());});
     }
 
-    public void save(int hikeInfoId) {
+    public void save(int hikeInfoId, int observationId) {
         HikeInformationDatabase.databaseWriteExecutor.execute(() ->{
         try {
             final long convertTime = InputDateConverter.covertTime(String.format("%s %s", date.getValue(), time.getValue()));
             useCase.insertObservation(
                     new Observation(
-                            0,
+                            observationId,
                             hikeInfoId,
                             name.getValue() == null ? "" : name.getValue(),
                             null,
