@@ -8,7 +8,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.sqlite.db.SimpleSQLiteQuery;
 
+import com.example.megohike.common.InputDateConverter;
+import com.example.megohike.common.InputDateFormatter;
 import com.example.megohike.common.UiState;
 import com.example.megohike.common.UiStateEmpty;
 import com.example.megohike.common.UiStateSearchEmpty;
@@ -23,6 +26,7 @@ import com.example.megohike.domain.use_case.LoadAllHikeInfoUseCase;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -31,6 +35,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class HikingListViewModel extends ViewModel {
+    private static final String BASE_QUERY = "SELECT * FROM hike_infos";
 
     private final LoadAllHikeInfoUseCase useCase;
 
@@ -45,50 +50,105 @@ public class HikingListViewModel extends ViewModel {
 
     private ScheduledFuture<?> future = null;
 
-    private String cacheNameQuery = null;
-    private String hikeNameQuery = null;
+    // for advance search
+    private String hikeName = null;
+
+    private String startDate = null;
+    private int level = -1;
+
+    private String cacheQuery = null;
 
     public HikingListViewModel(@NonNull LoadAllHikeInfoUseCase useCase) {
         this.useCase = useCase;
-        loadInfoDataRunnable = () -> {
-            if (hikeNameQuery.trim().equals(cacheNameQuery)) {
-                return;
-            }
-            cacheNameQuery = hikeNameQuery.trim();
-            final List<HikeInfo> result = cacheNameQuery.isEmpty() ? useCase.getAllHikeInfo() : useCase.getAllHikeInfoByName(cacheNameQuery);
-            if (result != null && result.size() != 0) {
-                _hikeItems.postValue(result);
-                _uiState.postValue(new UiStateSuccess());
-            } else {
-                _hikeItems.postValue(new ArrayList<>());
-                _uiState.postValue(new UiStateSearchEmpty());
-            }
-        };
+        loadInfoDataRunnable = (Runnable) () -> loadHikingList(false);
     }
 
-    public void loadHikingList() {
-        HikeInformationDatabase.databaseWriteExecutor.execute(() -> {
-            final List<HikeInfo> result = cacheNameQuery == null || cacheNameQuery.isEmpty() ? useCase.getAllHikeInfo() : useCase.getAllHikeInfoByName(hikeNameQuery);
+    public void loadHikingList(boolean isForceLoad) {
+        HikeInformationDatabase.databaseWriteExecutor.execute( () -> {
+            loadData(isForceLoad);
+        });
+    }
+
+    private void loadData(boolean isForceLoad) {
+        final String queryStr = loadQuery();
+        if (!queryStr.equals(cacheQuery) || isForceLoad) {
+            cacheQuery = queryStr;
+            final List<HikeInfo> result = useCase.getAllHikeInfo(cacheQuery);
             if (result != null && result.size() != 0) {
                 _hikeItems.postValue(result);
                 _uiState.postValue(new UiStateSuccess());
             } else {
                 _hikeItems.postValue(new ArrayList<>());
-                if (cacheNameQuery == null || cacheNameQuery.isEmpty()) {
+                if (Objects.equals(queryStr, BASE_QUERY)) {
                     _uiState.postValue(new UiStateEmpty());
                 } else {
                     _uiState.postValue(new UiStateSearchEmpty());
                 }
             }
-        });
+        }
     }
 
-    public void setHikeNameQuery(String name) {
-        hikeNameQuery = name;
+    public void setHikeNameByQuickSearch(String name) {
+        setHikeName(name);
         if (future != null) {
             future.cancel(true);
         }
         future = executorService.schedule(loadInfoDataRunnable, 1, TimeUnit.SECONDS);
+    }
+
+    public void setHikeName(String name) {
+        hikeName = name.trim();
+    }
+
+    public String getHikeName() {
+        return this.hikeName;
+    }
+
+    public void setStartDate(String date) {
+        startDate = date;
+    }
+
+    public String getStartDate() {
+        return this.startDate;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public int getLevel() {
+        return this.level;
+    }
+
+    public boolean isDateFormatCorrect() {
+        final Boolean isCorrect = InputDateFormatter.isFormatCorrect(startDate);
+        if (isCorrect == null || startDate.isEmpty()) return true;
+        return isCorrect;
+    }
+
+    private String loadQuery() {
+        ArrayList<String> querys = new ArrayList<>();
+        if (hikeName != null && !hikeName.isEmpty()) {
+            querys.add("name_of_hike LIKE '%" + hikeName + "%'");
+        }
+        if (startDate != null && !startDate.isEmpty()) {
+            querys.add("start_date = " + InputDateConverter.covert(startDate));
+        }
+        if (level != -1) {
+            querys.add("level_of_difficulty = " + level);
+        }
+        StringBuilder temp = new StringBuilder(BASE_QUERY);
+        if (!querys.isEmpty()) {
+            temp.append(" WHERE");
+            for (int i = 0; i < querys.size(); i++) {
+                temp.append(" ").append(querys.get(i));
+                if (querys.size() != 1 && i != querys.size() -1) {
+                    temp.append(" AND");
+                }
+            }
+        }
+        temp.append(";");
+        return temp.toString();
     }
 
 }

@@ -56,7 +56,7 @@ public class NewObservationFragment extends Fragment implements AppDatePicker.Da
         super.onCreate(savedInstanceState);
         final HikeInformationDatabase database = HikeInformationDatabase.getDatabase(getContext());
         viewModel = new ViewModelProvider(
-                this, new NewObservationViewModelFactory(new AddNewObservationUseCaseImpl(database))
+                this, new NewObservationViewModelFactory()
         ).get(NewObservationViewModel.class);
         hikeInfoId = NewObservationFragmentArgs.fromBundle(getArguments()).getInfoId();
         final String observationData = NewObservationFragmentArgs.fromBundle(getArguments()).getObservationData();
@@ -88,7 +88,10 @@ public class NewObservationFragment extends Fragment implements AppDatePicker.Da
             final int id = Integer.parseInt(hikeInfoId);
             if (id != 0) {
                 final int observationId = observation == null ? 0 : observation.getObservationId();
-                viewModel.save(id, observationId);
+                final Observation data = viewModel.loadObservation(id, observationId);
+                Navigation.findNavController(binding.getRoot()).navigate(
+                        NewObservationFragmentDirections.actionNewObservationFragmentToNewObservationConfirmFragment(new Gson().toJson(data))
+                );
             } else {
                 Toast.makeText(getContext(), "Unexpected error occurred", Toast.LENGTH_SHORT).show();
             }
@@ -105,21 +108,6 @@ public class NewObservationFragment extends Fragment implements AppDatePicker.Da
         checkEditTextErrorState(this.getViewLifecycleOwner(), viewModel.isTimeFormatCorrect, binding.timeTextLayout, getResources().getString(R.string.enter_valid_time_format));
         viewModel.getBtnEnableState.observe(this.getViewLifecycleOwner(), isEnable -> {
             binding.saveBtn.setEnabled(isEnable);
-        });
-        viewModel.getUiState.observe(this.getViewLifecycleOwner(), isSuccess -> {
-            if (isSuccess != null) {
-                if (isSuccess) {
-                    final NavController navController = Navigation.findNavController(view);
-                    final NavBackStackEntry backStack = navController.getPreviousBackStackEntry();
-                    if (backStack != null) {
-                        backStack.getSavedStateHandle().set("back_result", true);
-                    }
-                    navController.popBackStack();
-                    Toast.makeText(getContext(), "Data was successfully saved", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "Unexpected error occurred while saving data", Toast.LENGTH_SHORT).show();
-                }
-            }
         });
     }
 

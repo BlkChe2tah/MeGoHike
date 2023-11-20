@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_HikingListFragment_to_hikingDetailFragment"
             app:destination="@id/hikingDetailFragment" />
+        <action
+            android:id="@+id/action_HikingListFragment_to_advanceSearchFragment"
+            app:destination="@id/advanceSearchFragment" />
     </fragment>
     <fragment
         android:id="@+id/NewHikingFragment"
@@ -66,6 +69,9 @@
             android:name="infoId"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_newObservationFragment_to_newObservationConfirmFragment"
+            app:destination="@id/newObservationConfirmFragment" />
     </fragment>
     <fragment
         android:id="@+id/newEquipmentFragment"
@@ -92,6 +98,21 @@
             app:nullable="true" />
         <argument
             android:name="type"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/advanceSearchFragment"
+        tools:layout="@layout/fragment_advance_search"
+        android:name="com.example.megohike.presentation.advance_search.AdvanceSearchFragment"
+        android:label="@string/fragment_advance_search" />
+    <fragment
+        android:id="@+id/newObservationConfirmFragment"
+        tools:layout="@layout/fragment_new_observation_confirm"
+        android:name="com.example.megohike.presentation.new_observation_confirm.NewObservationConfirmFragment"
+        android:label="NewObservationConfirmFragment" >
+        <argument
+            android:name="observation"
             app:argType="string"
             app:nullable="true" />
     </fragment>

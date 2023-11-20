@@ -8,6 +8,5 @@ import com.example.megohike.data.data_source.database.entities.HikeInfo;
 import java.util.List;
 
 public interface LoadAllHikeInfoUseCase {
-    List<HikeInfo> getAllHikeInfo();
-    List<HikeInfo> getAllHikeInfoByName(String  name);
+    List<HikeInfo> getAllHikeInfo(String query);
 }

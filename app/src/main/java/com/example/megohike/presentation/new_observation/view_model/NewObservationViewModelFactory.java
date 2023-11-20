@@ -8,17 +8,15 @@ import com.example.megohike.domain.use_case.AddNewObservationUseCase;
 
 public class NewObservationViewModelFactory implements ViewModelProvider.Factory {
 
-    private AddNewObservationUseCase useCase;
 
-    public NewObservationViewModelFactory(@NonNull AddNewObservationUseCase useCase) {
-        this.useCase = useCase;
+    public NewObservationViewModelFactory() {
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(NewObservationViewModel.class)) {
-            return (T)new NewObservationViewModel(useCase);
+            return (T)new NewObservationViewModel();
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }

@@ -17,7 +17,6 @@ import com.example.megohike.domain.use_case.AddNewObservationUseCase;
 
 public class NewObservationViewModel extends ViewModel {
 
-    final private AddNewObservationUseCase useCase;
     final private MutableLiveData<String> name = new MutableLiveData<>(null);
     final public LiveData<Boolean> isNameEmpty = Transformations.map(name, this::isBlankString);
 
@@ -28,34 +27,22 @@ public class NewObservationViewModel extends ViewModel {
     final private MutableLiveData<String> comment = new MutableLiveData<>(null);
     final private MediatorLiveData<Boolean> btnEnableState = new MediatorLiveData<>(false);
     final public LiveData<Boolean> getBtnEnableState = btnEnableState;
-    final private MutableLiveData<Boolean> uiState = new MutableLiveData<>(null);
-    final public LiveData<Boolean> getUiState = uiState;
-    public NewObservationViewModel(@NonNull AddNewObservationUseCase useCase) {
-        this.useCase = useCase;
+    public NewObservationViewModel() {
         btnEnableState.addSource(isNameEmpty, state -> {btnEnableState.postValue(checkBtnState());});
         btnEnableState.addSource(isDateFormatCorrect, state -> {btnEnableState.postValue(checkBtnState());});
         btnEnableState.addSource(isTimeFormatCorrect, state -> {btnEnableState.postValue(checkBtnState());});
     }
 
-    public void save(int hikeInfoId, int observationId) {
-        HikeInformationDatabase.databaseWriteExecutor.execute(() ->{
-        try {
-            final long convertTime = InputDateConverter.covertTime(String.format("%s %s", date.getValue(), time.getValue()));
-            useCase.insertObservation(
-                    new Observation(
-                            observationId,
-                            hikeInfoId,
-                            name.getValue() == null ? "" : name.getValue(),
-                            null,
-                            convertTime,
-                            comment.getValue()
-                    )
-            );
-            uiState.postValue(true);
-        } catch (NumberFormatException e) {
-            uiState.postValue(false);
-        }
-        });
+    public Observation loadObservation(int hikeInfoId, int observationId) {
+        final long convertTime = InputDateConverter.covertTime(String.format("%s %s", date.getValue(), time.getValue()));
+        return new Observation(
+                observationId,
+                hikeInfoId,
+                name.getValue() == null ? "" : name.getValue(),
+                null,
+                convertTime,
+                comment.getValue()
+        );
     }
 
     public void setName(String name) {

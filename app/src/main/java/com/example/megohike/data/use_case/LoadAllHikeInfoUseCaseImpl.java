@@ -2,6 +2,7 @@ package com.example.megohike.data.use_case;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.sqlite.db.SimpleSQLiteQuery;
 
 import com.example.megohike.data.data_source.database.HikeInformationDatabase;
 import com.example.megohike.data.data_source.database.entities.Equipment;
@@ -18,12 +19,8 @@ public class LoadAllHikeInfoUseCaseImpl implements LoadAllHikeInfoUseCase {
     }
 
     @Override
-    public List<HikeInfo> getAllHikeInfo() {
-        return db.hikeInformationDao().getAll();
+    public List<HikeInfo> getAllHikeInfo(String query) {
+        return db.hikeInformationDao().getAll(new SimpleSQLiteQuery(query));
     }
 
-    @Override
-    public List<HikeInfo> getAllHikeInfoByName(String name) {
-        return db.hikeInformationDao().getHikeByName(name);
-    }
 }

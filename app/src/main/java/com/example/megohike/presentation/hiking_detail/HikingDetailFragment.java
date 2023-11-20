@@ -182,7 +182,7 @@ public class HikingDetailFragment extends Fragment implements ObservationInfoVie
                     backStack.getSavedStateHandle().set("back_result_confirm", null);
                     HikeInformationDatabase.databaseWriteExecutor.execute(() -> {
                         viewModel.loadHikeInfo(hikeInfoId);
-                        listViewModel.loadHikingList();
+                        listViewModel.loadHikingList(true);
                     });
                 }
             });
